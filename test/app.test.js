@@ -34,7 +34,7 @@ describe('Testing the timestamp endpoint', () => {
 
 describe('Test the date function', () => {
     test('It should return the date in UTC in ISO 8601 format', () => {
-        const date = util.timestamp();
+        const date = util.isoTimestamp();
         expect(date.timestamp).toMatchISOregex();
     });
 });

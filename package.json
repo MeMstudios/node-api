@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A test REST API",
   "main": "app.js",
+  "repository": "https://github.com/MeMstudios/node-api",
   "scripts": {
     "test": "jest"
   },
