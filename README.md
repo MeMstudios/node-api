@@ -1,4 +1,4 @@
-# Node.js API with Express
+# Node.js REST API
 Requirements
 ---
 Updated Node.js and NPM
@@ -19,7 +19,7 @@ the other tests the actual datetime function.
 
 Description
 ---
-This is a basic structure for a REST API.  
+This is a basic structure for a REST API using Node.js and Express.  
 The server and app files are split up so you can test app without running the server.  
 Add more utility functions to util.js and more endpoints to app.js.  
 I would eventually split them into two test suites.  
