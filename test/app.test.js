@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../app');
-const util = require('../util');
+const app = require('../src/app');
+const util = require('../src/util');
 
 expect.extend({
     toMatchISOregex(timestamp) {
