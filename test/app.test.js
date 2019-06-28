@@ -26,7 +26,7 @@ expect.extend({
 });
 
 describe('Testing the timestamp endpoint', () => {
-    test('It should responsed to the GET method with 200 status', async () => {
+    test('It should respond to the GET method with 200 status', async () => {
         const response = await request(app).get('/timestamp');
         expect(response.statusCode).toBe(200);
     });
