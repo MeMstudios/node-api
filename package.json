@@ -10,8 +10,6 @@
   "author": "Michael Murphy",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "jest": "^24.8.0",
     "superagent": "^5.1.0",
     "supertest": "^4.0.2"
