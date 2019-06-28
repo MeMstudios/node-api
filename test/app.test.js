@@ -4,7 +4,7 @@ const util = require('../src/util');
 
 expect.extend({
     toMatchISOregex(timestamp) {
-        //Regex should match the ISO 8601 for datetime without milliseconds
+        //Regex should match the ISO 8601 for datetime without milliseconds.  I think the regex can be improved.  We're assuming it's a valid timestamp.
         const isoRegex = /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z)/;
         const pass = isoRegex.test(timestamp);
 
