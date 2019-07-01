@@ -1,6 +1,6 @@
-var express = require("express");
-var app = express();
-var util = require('./util');
+const express = require("express");
+const app = express();
+const util = require('./util');
 
 //Timestamp endpoint responds to GET request with timestamp JSON.
 app.get("/timestamp", (req, res) => {
