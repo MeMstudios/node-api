@@ -1,3 +1,5 @@
+"use strict"; //for safer JavaScript
+
 const app = require('./src/app');
 
 //Start the express server
