@@ -143,7 +143,9 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/leaderboard", (req, res) => {
-    db.getLeaderboard(req.query.inf, (err, leadersRes) => {
+    let inf = req.query.inf === 'true';
+   
+    db.getLeaderboard(inf, (err, leadersRes) => {
         if (err) {
             console.error(err);
             res.status(500).json({error: "database error!"});
@@ -158,10 +160,12 @@ app.get("/leaderboard", (req, res) => {
                 else {
                     leaderBoard = Array(10);
                 }
+                
                 for (let i = 0; i < leaderBoard.length; i++) {
                     let userHighscore;
                     //Show the correct score if it's the infinite leaderboard.
-                    if (req.query.inf) {
+                    
+                    if (inf) {
                         userHighscore = leadersRes[i].infHighscore;
                     }
                     else {
