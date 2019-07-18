@@ -11,6 +11,28 @@ describe('Testing the timestamp endpoint', () => {
     });
 });
 
+// describe('Testing the insert user endpoint', () => {
+//     test('It should respond to the POST method with 401 status', () => {
+//         request(app)
+//         .post('/user')
+//         .send({username: "test"})
+//         .set('Accept', 'application/json')
+//         .expect(401)
+//         .expect('Content-Type', /json/)
+//         .end(function(err, res) {
+//             if (err) throw err;
+//         });
+//     });
+// });
+
+describe('Testing the get user endpoint', () => {
+    test('It should respond to the GET method with 200 status', async () => {
+        expect.assertions(1);
+        const response = await request(app).get('/user?id=5d2f67dd23e9c5672ae61907');
+        expect(response.statusCode).toBe(200);
+    });
+});
+
 describe('Test the date function', () => {
     test('It should return the date in UTC in ISO 8601 format', () => {
         const date = util.isoTimestamp();
