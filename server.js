@@ -6,8 +6,8 @@ const app = require('./src/app');
 
 if (process.env.NODE_ENV == 'production') {
     const options = {
-        key: fs.readFileSync("/etc/letsencrypt/live/drop.memstudios.com/privkey.pem"),
-        cert: fs.readFileSync("/etc/letsencrypt/live/drop.memstudios.com/cert.pem")
+        key: fs.readFileSync("/etc/letsencrypt/live/dropgame.io/privkey.pem"),
+        cert: fs.readFileSync("/etc/letsencrypt/live/dropgame.io/cert.pem")
     };
     
     //Create the https server
