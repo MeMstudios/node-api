@@ -124,8 +124,7 @@ app.post("/login", (req, res) => {
                             res.status(500).json({error: "server error!"});
                         }
                         else {
-                            if (success) {
-                                res.cookie("logged_in", user._id, {expires: new Date(Date.now() + 86000000)});
+                            if (success) {                                
                                 res.status(200).json({
                                     success: true, 
                                     id: user._id
