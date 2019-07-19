@@ -5,6 +5,11 @@ const app = express();
 const util = require('./util');
 const db = require('./db');
 
+let clientURL = 'http://localhost:8000/index.html';
+if (process.env.NODE_ENV == 'production') {
+    clientURL = 'https://drop.memstudios.com/';
+}
+
 //Express Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -124,7 +129,7 @@ app.post("/login", (req, res) => {
                             res.status(500).json({error: "server error!"});
                         }
                         else {
-                            if (success) {                                
+                            if (success) {
                                 res.status(200).json({
                                     success: true, 
                                     id: user._id
@@ -185,18 +190,29 @@ app.get("/leaderboard", (req, res) => {
 });
 
 app.post("/highscore", (req, res) => {
-    if (req.body.id === undefined || req.body.highscore === undefined) {
-        res.status(400).json({error: "Invalid request!"});
+    //security!  All the requests should only be coming from our application.
+    if (req.headers.referer !== clientURL) {
+        res.status(401).json({error: "No Cheating!"});
     }
     else {
-        db.updateHighscore(req.body.id, req.body.highscore, req.body.inf, (err, scoreRes) => {
-            if (err) {
-                res.status(500).json({error: "Database error!"});
-            }
-            else {
-                res.status(200).json({success: true, message: "Updated highscore!"})
-            }
-        });
+        if (req.body.id === undefined || req.body.highscore === undefined) {
+            res.status(400).json({error: "Invalid request!"});
+        }
+        else {
+            db.updateHighscore(req.body.id, req.body.highscore, req.body.inf, (err, scoreRes) => {
+                if (err) {
+                    res.status(500).json({error: "Database error!"});
+                }
+                else {
+                    if (scoreRes.modifiedCount > 0) {
+                        res.status(200).json({success: true, message: "Updated highscore!"});
+                    }
+                    else {
+                        res.status(200).json({success: false, message: "Nothing changed."})
+                    }
+                }
+            });
+        }
     }
 });
 
