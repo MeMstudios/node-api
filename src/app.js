@@ -51,7 +51,8 @@ app.post("/user", (req, res) => {
                                 username: req.body.username, 
                                 password: hash, 
                                 highscore: 0, 
-                                infHighscore: 0
+                                infHighscore: 0,
+                                userAgentString: req.headers["user-agent"]
                             };
                             db.insertUser(user, (err, insertRes) => {
                                 if (err) console.error(err);
@@ -199,7 +200,7 @@ app.post("/highscore", (req, res) => {
             res.status(400).json({error: "Invalid request!"});
         }
         else {
-            db.updateHighscore(req.body.id, req.body.highscore, req.body.inf, (err, scoreRes) => {
+            db.updateHighscore(req.body.id, req.body.highscore, req.headers["user-agent"], req.body.inf, (err, scoreRes) => {
                 if (err) {
                     res.status(500).json({error: "Database error!"});
                 }

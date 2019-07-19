@@ -11,7 +11,7 @@ if (process.env.NODE_ENV == 'production') {
     dbURL = '127.0.0.1';
 }
 else {
-    dbURL = 'drop.memstudios.com'
+    dbURL = 'dropgame.io'
 }
 
 let url = "mongodb://" + mongoUser + ":" + mongoPwd + "@" + dbURL + ":27017/drop-db";
@@ -77,18 +77,19 @@ exports.getLeaderboard = (inf = false, callback) => {
     });
 }
 
-exports.updateHighscore = (userId, newHighscore, inf = false, callback) => {
+exports.updateHighscore = (userId, newHighscore, userAgent, inf = false, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
         let dbo = db.db("drop-db");
         let query = {"_id": mongo.ObjectID(userId)};
-        let update;
+        let updateObj = {userAgentString: userAgent};
         if (!inf) {
-            update = { $set: {highscore: newHighscore}};
+            updateObj.highscore = newHighscore;
         }
         else {
-            update = { $set: {infHighscore: newHighscore}};
+            updateObj.infHighscore = newHighscore;
         }
+        let update = { $set: updateObj };
         dbo.collection("users").updateOne(query, update, (err, res) => {
             db.close();
             if (err) return callback(err);
