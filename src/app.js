@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const Cookies = require("cookies");
+const {check, validationResult} = require('express-validator');
 const app = express();
 const util = require('./util');
 const db = require('./db');
@@ -19,6 +20,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+app.use(express.json())
 
 //Timestamp endpoint responds to GET request with timestamp JSON.
 app.get("/timestamp", (req, res) => {
@@ -30,9 +32,16 @@ app.get("/timestamp", (req, res) => {
  * application/json: {"username": "name", "password": "newpassword"}
  * Highscore will be initialized to 0
  */
-app.post("/user", (req, res) => {
+app.post("/user", [
+    check('username').isLength({min: 3}).trim().escape(),
+    check('password').isLength({min: 3}).trim().escape()
+], (req, res) => {
+    const errors = validationResult(req);
     if (req.body.username === undefined || req.body.password === undefined) {
         res.status(400).json({error: "Invalid request!"});
+    }
+    else if (!errors.isEmpty()) {
+        res.status(422).json({ error: errors.array() });
     }
     else {
         db.findUser(req.body.username, (err, findRes) => {
@@ -106,11 +115,17 @@ app.get("/user", (req, res) => {
 /**
  * POST login endpoint takes a username and password in the request body
  */
-app.post("/login", (req, res) => {
+app.post("/login", [
+    check('username').isLength({min: 3}).trim().escape(),
+    check('password').isLength({min: 3}).trim().escape()
+], (req, res) => {
+    const errors = validationResult(req);
     if (req.body.username === undefined || req.body.password === undefined) {
         console.log(req.body);
         res.status(400).json({error: "Invalid request!"});
-        
+    }
+    else if (!errors.isEmpty()) {
+        res.status(422).json({ error: errors.array() });
     }
     else {
         db.findUser(req.body.username, (err, userRes) => {
@@ -177,7 +192,7 @@ app.get("/leaderboard", (req, res) => {
                         userHighscore = leadersRes[i].highscore;
                     }
                     leaderBoard[i] = {
-                        username: leadersRes[i].username,                        
+                        username: leadersRes[i].username,
                         highscore: userHighscore
                     };
                 }
@@ -190,10 +205,18 @@ app.get("/leaderboard", (req, res) => {
     });
 });
 
-app.post("/highscore", (req, res) => {
+app.post("/highscore", [
+    check('id').isLength({min: 20}).trim().escape(),
+    check('highscore').isNumeric().trim().escape(),
+    check('inf').isBoolean().trim().escape()
+], (req, res) => {
+    const errors = validationResult(req);
     //security!  All the requests should only be coming from our application.
     if (req.headers.referer !== clientURL) {
         res.status(401).json({error: "No Cheating!"});
+    }    
+    else if (!errors.isEmpty()) {
+        res.status(422).json({ error: errors.array() });
     }
     else {
         if (req.body.id === undefined || req.body.highscore === undefined) {
