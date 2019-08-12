@@ -72,7 +72,6 @@ app.post("/user", [
                                     });
                                 }
                             });
-                            
                         }
                     });
                 }
@@ -82,11 +81,17 @@ app.post("/user", [
 });
 
 /**
- * GET user endpoint takes and id in the query string
+ * GET user endpoint takes an id in the query string
  */
-app.get("/user", (req, res) => {
+app.get("/user", [
+    check('id').isLength({min: 20}).trim().escape()
+], (req, res) => {
+    const errors = validationResult(req);
     if (req.query.id === undefined) {
         res.status(400).json({error: "Invalid Request!"});
+    }
+    else if (!errors.isEmpty()) {
+        res.status(422).json({ error: errors.array() });
     }
     else {
         db.getUser(req.query.id, (err, userRes) => {
@@ -184,7 +189,6 @@ app.get("/leaderboard", (req, res) => {
                 for (let i = 0; i < leaderBoard.length; i++) {
                     let userHighscore;
                     //Show the correct score if it's the infinite leaderboard.
-                    
                     if (inf) {
                         userHighscore = leadersRes[i].infHighscore;
                     }
@@ -207,8 +211,8 @@ app.get("/leaderboard", (req, res) => {
 
 app.post("/highscore", [
     check('id').isLength({min: 20}).trim().escape(),
-    check('highscore').isNumeric().trim().escape(),
-    check('inf').isBoolean().trim().escape()
+    check('highscore').isNumeric(),
+    check('inf').isBoolean()
 ], (req, res) => {
     const errors = validationResult(req);
     //security!  All the requests should only be coming from our application.
