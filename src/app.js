@@ -48,7 +48,7 @@ app.post("/user", [
             if (err) console.error(err);
             else {
                 if (findRes[0] !== undefined) {
-                    res.status(200).json({error: "User already exists!"});
+                    res.status(422).json({error: "User already exists!"});
                 }
                 else {
                     util.cryptPassword(req.body.password, (err, hash) => {
@@ -97,7 +97,7 @@ app.get("/user", [
         db.getUser(req.query.id, (err, userRes) => {
             if (err) {
                 console.error(err)
-                res.status(500).json({error: "Database error!"});
+                res.status(500).json({error: err});
             }
             else {
                 if (userRes[0] === undefined) {
@@ -136,7 +136,7 @@ app.post("/login", [
         db.findUser(req.body.username, (err, userRes) => {
             if (err) {
                 console.error(err);
-                res.status(500).json({error: "database error!"});
+                res.status(500).json({error: err});
             }
             else {
                 if (userRes[0] === undefined) {
@@ -166,6 +166,32 @@ app.post("/login", [
         });
     }
 });
+
+if (process.env.NODE_ENV != 'production') {
+/**
+ * DELETE endpoint for users. Only used for testing.
+ */
+    app.delete("/user", (req, res) => {
+            if (req.body.id === undefined) {
+                res.status(400).json({error: "Invalid Request!"});
+            }
+            else {
+                db.deleteUser(req.body.id, (err, deleteRes) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(500).json({error: err});
+                    }
+                    else if (deleteRes.result.ok === 1 && deleteRes.result.n === 1) {
+                        res.status(200).json({success: true});
+                    }
+                    else {
+                        res.status(200).json({success: false});
+                    }
+                });
+            }
+        }
+    )
+}
 
 app.get("/leaderboard", (req, res) => {
     let inf = req.query.inf === 'true';

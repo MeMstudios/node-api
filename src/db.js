@@ -14,9 +14,10 @@ else {
     dbURL = 'dropgame.io'
 }
 
-let url = "mongodb://" + mongoUser + ":" + mongoPwd + "@" + dbURL + ":27017/drop-db";
+const url = "mongodb://" + mongoUser + ":" + mongoPwd + "@" + dbURL + ":27017/drop-db";
 
 
+//Insert a new user
 exports.insertUser = (user, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -30,6 +31,21 @@ exports.insertUser = (user, callback) => {
     });
 }
 
+exports.deleteUser = (userId, callback) => {
+    MongoClient.connect(url, (err, db) => {
+        if (err) throw err;
+        let dbo = db.db("drop-db");
+        let query = {"_id": mongo.ObjectID(userId)};
+        dbo.collection("users").deleteOne(query, function(err, res) {
+            db.close();
+            if (err) return callback(err);
+            
+            return callback(err, res);
+        });
+    });
+}
+
+//Get a user by username
 exports.findUser = (name, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -44,11 +60,12 @@ exports.findUser = (name, callback) => {
     });
 }
 
+//Get a user by id
 exports.getUser = (userId, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
         let dbo = db.db("drop-db");
-        let query = {"_id": mongo.ObjectID(userId)}
+        let query = {"_id": mongo.ObjectID(userId)};
         dbo.collection("users").find(query).toArray(function(err, res) {
             db.close();
             if (err) return callback(err);
@@ -58,6 +75,7 @@ exports.getUser = (userId, callback) => {
     });
 }
 
+//return the leaderboard in descending order
 exports.getLeaderboard = (inf = false, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -77,6 +95,7 @@ exports.getLeaderboard = (inf = false, callback) => {
     });
 }
 
+//Update a highscore
 exports.updateHighscore = (userId, newHighscore, userAgent, inf = false, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;

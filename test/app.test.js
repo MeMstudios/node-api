@@ -3,33 +3,101 @@
 const request = require('supertest');
 const app = require('../src/app');
 const util = require('../src/util');
+const fs = require('fs');
+
+const cred = JSON.parse(fs.readFileSync('credential.json'));
+const testUser = cred.test.user;
+const testPwd = cred.test.pwd;
+
+let userId, server, agent;
+
+beforeEach((done) => {
+    server = app.listen(4000, (err) => {
+      if (err) return done(err);
+
+       agent = request.agent(server); // since the application is already listening, it should use the allocated port
+       done();
+    });
+});
+
+afterEach((done) => {
+    return server && server.close(done);
+});
 
 describe('Testing the timestamp endpoint', () => {
     test('It should respond to the GET method with 200 status', async () => {
-        const response = await request(app).get('/timestamp');
+        const response = await agent.get('/timestamp');
         expect(response.statusCode).toBe(200);
     });
 });
 
-// describe('Testing the insert user endpoint', () => {
-//     test('It should respond to the POST method with 401 status', () => {
-//         request(app)
-//         .post('/user')
-//         .send({username: "test"})
-//         .set('Accept', 'application/json')
-//         .expect(401)
-//         .expect('Content-Type', /json/)
-//         .end(function(err, res) {
-//             if (err) throw err;
-//         });
-//     });
-// });
+describe('Testing the insert user endpoint', () => {
+    test('It should respond to the POST method with 200 status', async ()=> {
+        expect.assertions(1);
+        await agent.post('/user')
+        .send({username: testUser, password: testPwd})
+        .set('Accept', 'application/json')
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        });
+    });
+});
+
+describe('Testing the login endpoint', ()=> {
+    test('It should respond with json and 200 status', async ()=> {
+        expect.assertions(1);
+        await agent.post('/login')
+        .send({username: testUser, password: testPwd})
+        .set('Accept', 'application/json')
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            else {
+                userId = res.body.id;
+            }
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        })
+    });
+});
 
 describe('Testing the get user endpoint', () => {
     test('It should respond to the GET method with 200 status', async () => {
         expect.assertions(1);
-        const response = await request(app).get('/user?id=5d2f67dd23e9c5672ae61907');
-        expect(response.statusCode).toBe(200);
+        await agent.get('/user?id=' + userId)
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        });
+    });
+});
+
+describe('Testing the delete endpoint', ()=> {
+    test('It should respond with json and 200 status', async ()=> {
+        expect.assertions(1);
+        await agent.delete('/user')
+        .send({id: userId})
+        .set('Accept', 'application/json')
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            console.log("deleted test user: " + res.body.success)
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        });
     });
 });
 
