@@ -2,10 +2,12 @@
 Requirements
 ---
 Updated Node.js and NPM
+MongoDB
 
 Usage
 ---
 Clone and cd into the repo.  
+You need a credential.json file in the root directory to connect to a mongodb  
 run `npm install`  
 run `node server.js`  
 visit localhost:3000/timestamp in the browser.
