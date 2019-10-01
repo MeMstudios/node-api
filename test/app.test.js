@@ -11,7 +11,7 @@ const testPwd = cred.test.pwd;
 
 let userId, server, agent;
 
-beforeEach((done) => {
+beforeAll((done) => {
     server = app.listen(4000, (err) => {
       if (err) return done(err);
 
@@ -20,7 +20,7 @@ beforeEach((done) => {
     });
 });
 
-afterEach((done) => {
+afterAll((done) => {
     return server && server.close(done);
 });
 

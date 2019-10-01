@@ -17,7 +17,13 @@ else {
 const url = "mongodb://" + mongoUser + ":" + mongoPwd + "@" + dbURL + ":27017/drop-db";
 
 
-//Insert a new user
+/**
+ * Insert a new user
+ * @param user object
+ * @param callback
+ * 
+ * @returns callback(err, userResponse)
+ */
 exports.insertUser = (user, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -31,6 +37,13 @@ exports.insertUser = (user, callback) => {
     });
 }
 
+/**
+ * Delete a user
+ * @param userId ObjectID
+ * @param callback
+ * 
+ * @returns callback(err, userResponse)
+ */
 exports.deleteUser = (userId, callback) => {
     MongoClient.connect(url, (err, db) => {
         if (err) throw err;
@@ -45,7 +58,13 @@ exports.deleteUser = (userId, callback) => {
     });
 }
 
-//Get a user by username
+/**
+ * Find a user by username
+ * @param name string
+ * @param callback
+ * 
+ * @returns callback(err, userResponse)
+ */
 exports.findUser = (name, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -60,7 +79,13 @@ exports.findUser = (name, callback) => {
     });
 }
 
-//Get a user by id
+/**
+ * Get a user by id
+ * @param userId ObjectID
+ * @param callback
+ * 
+ * @returns callback(err, userResponse)
+ */
 exports.getUser = (userId, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -75,7 +100,13 @@ exports.getUser = (userId, callback) => {
     });
 }
 
-//return the leaderboard in descending order
+/**
+ * Return the leaderboard in descending order
+ * @param inf bool  get infinite high score or timed highscore
+ * @param callback
+ * 
+ * @returns callback(err, queryResponse) 
+ */
 exports.getLeaderboard = (inf = false, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -95,7 +126,16 @@ exports.getLeaderboard = (inf = false, callback) => {
     });
 }
 
-//Update a highscore
+/**
+ * Update a highscore
+ * @param userId ObjectID
+ * @param newHighscore highscore to be updated
+ * @param userAgent string from the user agent description
+ * @param inf bool infinite score or not?
+ * @param callback
+ * 
+ * @returns callback(err, successResponse)
+ */
 exports.updateHighscore = (userId, newHighscore, userAgent, inf = false, callback) => {
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;

@@ -82,6 +82,7 @@ app.post("/user", [
 
 /**
  * GET user endpoint takes an id in the query string
+ * @param id
  */
 app.get("/user", [
     check('id').isLength({min: 20}).trim().escape()
@@ -119,6 +120,8 @@ app.get("/user", [
 
 /**
  * POST login endpoint takes a username and password in the request body
+ * @param username string
+ * @param password string
  */
 app.post("/login", [
     check('username').isLength({min: 3}).trim().escape(),
@@ -140,7 +143,7 @@ app.post("/login", [
             }
             else {
                 if (userRes[0] === undefined) {
-                    res.status(200).json({error: "Invalid username!"});
+                    res.status(401).json({error: "Invalid username!"});
                 }
                 else {
                     let user = userRes[0];
@@ -157,7 +160,7 @@ app.post("/login", [
                                 });
                             }
                             else {
-                                res.status(200).json({error: "Wrong password!  I can't help you."});
+                                res.status(401).json({error: "Wrong password!  I can't help you."});
                             }
                         }
                     });
@@ -193,6 +196,10 @@ if (process.env.NODE_ENV != 'production') {
     )
 }
 
+/**
+ * GET leaderboard endpoint returns the top 10 scores for the infite or timed game
+ * @param id
+ */
 app.get("/leaderboard", (req, res) => {
     let inf = req.query.inf === 'true';
    
@@ -235,6 +242,12 @@ app.get("/leaderboard", (req, res) => {
     });
 });
 
+/**
+ * POST endpoint to update the highscore for a given user id
+ * @param id string
+ * @param highscore number
+ * @param inf boolean
+ */
 app.post("/highscore", [
     check('id').isLength({min: 20}).trim().escape(),
     check('highscore').isNumeric(),
