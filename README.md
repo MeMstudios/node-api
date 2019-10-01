@@ -1,8 +1,7 @@
 # Node.js REST API for [dropgame.io](https://dropgame.io)
 Requirements
 ---
-Updated Node.js and NPM
-MongoDB
+Updated Node.js, NPM, and MongoDB
 
 Usage
 ---
