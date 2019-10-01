@@ -21,5 +21,5 @@ The only tests left to write are for the leaderboard endpoints.
 
 Description
 ---
-This is the REST API for my game at dropgame.io.  
+This is the REST API for my game at [https://dropgame.io]dropgame.io.  
 It handles simple user signup/login with functions to update highscores and return the top ten scores as a leaderboard.  
