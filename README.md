@@ -16,9 +16,9 @@ Tests
 Run the test suite with Jest: `npm run test`  
 The server and app files are split up so you can test app without running the server.  
 Supertest starts up a server on port 4000 (instead of 3000)  
-We test the lifecycle of the user: Create, login, read the user data, and delete the user  
-This covers most of the functions in util and db.  
-The only tests left to write are for the leaderboard endpoints.
+We test the lifecycle of the user: Create, login, read the user data, and delete the user.  
+The leaderboard tests update the test users score to 1000, then test the get leaderboard function, before deleting the test user.  
+This covers the functions in util and db.  
 
 Description
 ---
