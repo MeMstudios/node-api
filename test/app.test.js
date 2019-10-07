@@ -83,6 +83,41 @@ describe('Testing the get user endpoint', () => {
     });
 });
 
+describe('Testing the update highscore endpoint', () => {
+    test('It should respond to the POST method with 200 status', async () => {
+        expect.assertions(1);
+        await agent.post('/highscore')
+        .send({id: userId, highscore: 1000, inf: false})
+        .set('Accept', 'application/json')
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            else if (res.success == false) {
+                console.log(res.message);
+            }
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        }); 
+    });
+});
+
+describe('Testing the leaderboard endpoint', () => {
+    test('It should respond to GET method with 200 status', async () => {
+        expect.assertions(1);
+        await agent.get('/leaderboard?inf=false')
+        .then((res) => {
+            if (res.error != false) {
+                console.log(res.error);
+            }
+            expect(res.statusCode).toBe(200);
+        }, (rej) => {
+            expect(rej.statusCode).toBe(500);
+        });
+    })
+})
+
 describe('Testing the delete endpoint', ()=> {
     test('It should respond with json and 200 status', async ()=> {
         expect.assertions(1);
@@ -109,3 +144,4 @@ describe('Test the date function', () => {
         expect(date.timestamp).toMatch(isoRegex);
     });
 });
+

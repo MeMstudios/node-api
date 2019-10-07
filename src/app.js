@@ -263,9 +263,9 @@ app.post("/highscore", [
 ], (req, res) => {
     const errors = validationResult(req);
     //security!  All the requests should only be coming from our application.
-    if (req.headers.referer !== clientURL) {
+    if (req.headers.referer !== clientURL && process.env.NODE_ENV == 'production') {
         res.status(401).json({error: "No Cheating!"});
-    }    
+    }
     else if (!errors.isEmpty()) {
         res.status(422).json({ error: errors.array() });
     }
