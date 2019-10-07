@@ -29,8 +29,10 @@ app.get("/timestamp", (req, res) => {
 
 /**
  * POST user endpoint checks for existing username and doesn't allow duplicates.
- * application/json: {"username": "name", "password": "newpassword"}
  * Highscore will be initialized to 0
+ * 
+ * @param username string
+ * @param password string
  */
 app.post("/user", [
     check('username').isLength({min: 3}).trim().escape(),
@@ -82,6 +84,7 @@ app.post("/user", [
 
 /**
  * GET user endpoint takes an id in the query string
+ * 
  * @param id
  */
 app.get("/user", [
@@ -120,6 +123,7 @@ app.get("/user", [
 
 /**
  * POST login endpoint takes a username and password in the request body
+ * 
  * @param username string
  * @param password string
  */
@@ -173,6 +177,8 @@ app.post("/login", [
 if (process.env.NODE_ENV != 'production') {
 /**
  * DELETE endpoint for users. Only used for testing.
+ * 
+ * @param id string
  */
     app.delete("/user", (req, res) => {
             if (req.body.id === undefined) {
@@ -198,7 +204,8 @@ if (process.env.NODE_ENV != 'production') {
 
 /**
  * GET leaderboard endpoint returns the top 10 scores for the infite or timed game
- * @param id
+ * 
+ * @param inf boolean
  */
 app.get("/leaderboard", (req, res) => {
     let inf = req.query.inf === 'true';
@@ -211,7 +218,7 @@ app.get("/leaderboard", (req, res) => {
         else {
             if (leadersRes.length > 0) {
                 let leaderBoard;
-                //Maximum 10 on the leaderboard
+                // Initialize array to maximum 10 on the leaderboard
                 if (leadersRes.length < 10) {
                     leaderBoard = Array(leadersRes.length);
                 }
@@ -244,9 +251,10 @@ app.get("/leaderboard", (req, res) => {
 
 /**
  * POST endpoint to update the highscore for a given user id
- * @param id string
+ * 
+ * @param id string  the user's ID
  * @param highscore number
- * @param inf boolean
+ * @param inf boolean  the infinite table or not
  */
 app.post("/highscore", [
     check('id').isLength({min: 20}).trim().escape(),
