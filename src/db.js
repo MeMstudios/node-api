@@ -3,18 +3,17 @@ const MongoClient = mongo.MongoClient;
 const fs = require('fs');
 const util = require('./util');
 
-const cred = JSON.parse(fs.readFileSync('./credential.json'));
-const mongoUser = cred.mongo.user;
-const mongoPwd = cred.mongo.pwd;
+//const cred = JSON.parse(fs.readFileSync('./credential.json'));
+const {
+    MONGO_USERNAME,
+    MONGO_PASSWORD,
+    MONGO_HOST,
+    MONGO_PORT,
+    MONGO_DB
+} = process.env;
 
-if (process.env.NODE_ENV == 'production') {
-    dbURL = '127.0.0.1';
-}
-else {
-    dbURL = 'dropgame.io'
-}
-
-const url = "mongodb://" + mongoUser + ":" + mongoPwd + "@" + dbURL + ":27017/drop-db";
+const url = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
+console.log(`mongourl: ${url}`);
 
 
 /**
@@ -31,7 +30,7 @@ exports.insertUser = (user, callback) => {
         dbo.collection("users").insertOne(user, function(err, res) {
             db.close();
             if (err) return callback(err);
-            
+
             return callback(err, res);
         });
     });

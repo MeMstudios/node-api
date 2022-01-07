@@ -8,7 +8,7 @@ const db = require('./db');
 
 let clientURL = 'http://localhost:8000/index.html';
 if (process.env.NODE_ENV == 'production') {
-    clientURL = 'https://dropgame.io/';
+    clientURL = 'https://dropt.game/';
 }
 
 //Express Middleware

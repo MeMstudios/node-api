@@ -1,0 +1,76 @@
+version: '3'
+
+services:
+  drop-db:
+    image: mongo:4.1.8-xenial
+    container_name: drop-db
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+      - MONGO_INITDB_DATABASE=$MONGO_DB
+    volumes:
+      - ./db/data:/data/db
+      - ./db/init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  drop-api:
+    image: nodejs
+    container_name: drop-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - MONGO_USERNAME
+      - MONGO_PASSWORD
+      - MONGO_HOST=drop-db
+      - MONGO_PORT
+      - MONGO_DB
+    ports:
+      - "8000:3000"
+      - "8443:3443"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - drop-db
+    links:
+      - drop-db
+
+  drop-api-test:
+    image: nodejs
+    container_name: drop-api-test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=development
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOST=drop-db
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    ports:
+      - "8080:3000"
+    volumes:
+      - .:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - drop-db
+    command: npm test
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data:
+  node_modules:

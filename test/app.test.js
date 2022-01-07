@@ -5,14 +5,13 @@ const app = require('../src/app');
 const util = require('../src/util');
 const fs = require('fs');
 
-const cred = JSON.parse(fs.readFileSync('credential.json'));
-const testUser = cred.test.user;
-const testPwd = cred.test.pwd;
+const testUser = 'test';
+const testPwd = 'test123';
 
 let userId, server, agent;
 
 beforeAll((done) => {
-    server = app.listen(4000, (err) => {
+    server = app.listen(3000, (err) => {
       if (err) return done(err);
 
        agent = request.agent(server); // since the application is already listening, it should use the allocated port

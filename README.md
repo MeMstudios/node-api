@@ -1,4 +1,4 @@
-# Node.js REST API for [dropgame.io](https://dropgame.io)
+# Node.js REST API for [dropt.game](https://dropt.game)
 Requirements
 ---
 Updated Node.js, NPM, and MongoDB
@@ -22,5 +22,5 @@ This covers the functions in util and db.
 
 Description
 ---
-This is the REST API for my game at [dropgame.io](https://dropgame.io)  
+This is the REST API for my game at [dropt.game](https://dropt.game)  
 It handles simple user signup/login with functions to update highscores and return the top ten scores as a leaderboard.  
