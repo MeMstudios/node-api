@@ -209,7 +209,6 @@ if (process.env.NODE_ENV != 'production') {
  */
 app.get("/leaderboard", (req, res) => {
     let inf = req.query.inf === 'true';
-   
     db.getLeaderboard(inf, (err, leadersRes) => {
         if (err) {
             console.error(err);
@@ -225,7 +224,7 @@ app.get("/leaderboard", (req, res) => {
                 else {
                     leaderBoard = Array(10);
                 }
-                
+
                 for (let i = 0; i < leaderBoard.length; i++) {
                     let userHighscore;
                     //Show the correct score if it's the infinite leaderboard.

@@ -11,44 +11,16 @@ services:
       - MONGO_INITDB_DATABASE=$MONGO_DB
     volumes:
       - ./db/data:/data/db
-      - ./db/init:/docker-entrypoint-initdb.d
     networks:
       - app-network
+    ports:
+      - 27017:27017
 
   drop-api:
-    image: nodejs
-    container_name: drop-api
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: theniceninja13/drop-api
     restart: always
-    environment:
-      - NODE_ENV=development
-      - MONGO_USERNAME
-      - MONGO_PASSWORD
-      - MONGO_HOST=drop-db
-      - MONGO_PORT
-      - MONGO_DB
-    ports:
-      - "8000:3000"
-      - "8443:3443"
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    networks:
-      - app-network
-    depends_on:
-      - drop-db
-    links:
-      - drop-db
-
-  drop-api-test:
-    image: nodejs
-    container_name: drop-api-test
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: always
+    env_file:
+      - .env
     environment:
       - NODE_ENV=development
       - MONGO_USERNAME=$MONGO_USERNAME
@@ -57,15 +29,14 @@ services:
       - MONGO_PORT=$MONGO_PORT
       - MONGO_DB=$MONGO_DB
     ports:
-      - "8080:3000"
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
+      - "8000:3000"
+      - "8443:3443"
     networks:
       - app-network
     depends_on:
       - drop-db
-    command: npm test
+    links:
+      - drop-db
 
 networks:
   app-network:
@@ -73,4 +44,3 @@ networks:
 
 volumes:
   data:
-  node_modules:

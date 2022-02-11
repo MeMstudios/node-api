@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  MONGO_DB: drop-db
+  MONGO_PASSWORD: 2938woagjn2039tj
+  MONGO_PORT: "27017"
+  MONGO_USERNAME: drop
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: drop-api-env
+  name: env

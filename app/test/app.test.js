@@ -143,4 +143,3 @@ describe('Test the date function', () => {
         expect(date.timestamp).toMatch(isoRegex);
     });
 });
-
