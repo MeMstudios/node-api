@@ -24,3 +24,9 @@ Description
 ---
 This is the REST API for my game at [dropt.game](https://dropt.game)  
 It handles simple user signup/login with functions to update highscores and return the top ten scores as a leaderboard.  
+
+Deployment
+---
+docker build -t theniceninja13/drop-api ./app
+docker push theniceninja13/drop-api
+kubectl apply -f k8s

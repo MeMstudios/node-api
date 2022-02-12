@@ -27,21 +27,15 @@ spec:
       containers:
         - env:
             - name: MONGO_DB
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGO_DB
-                  name: env
+              value: drop-db
             - name: MONGO_HOST
               value: drop-db
+            - name: MONGO_PORT
+              value: "27017"
             - name: MONGO_PASSWORD
               valueFrom:
                 configMapKeyRef:
                   key: MONGO_PASSWORD
-                  name: env
-            - name: MONGO_PORT
-              valueFrom:
-                configMapKeyRef:
-                  key: MONGO_PORT
                   name: env
             - name: MONGO_USERNAME
               valueFrom:
