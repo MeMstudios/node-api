@@ -44,7 +44,8 @@ spec:
                   name: env
             - name: NODE_ENV
               value: development
-          image: theniceninja13/drop-api
+          image: theniceninja13/drop-api:latest
+          imagePullPolicy: Always
           name: drop-api
           ports:
             - containerPort: 3000
